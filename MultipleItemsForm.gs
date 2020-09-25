@@ -48,7 +48,7 @@ function onOpen() {
       .addItem('Get Started', 'setup')
       .addSeparator()
       .addItem('Update Seller Config', 'parseSellerInfo')
-      .addItem('Rebuild Inventory', 'parseAllItems')
+      .addItem('Add New Inventory Items', 'parseAllItems')
       .addToUi();
 }
 
@@ -106,8 +106,8 @@ function setup() {
                               ['3) When you\'re done filling out the "Configuration" tab, click "Update Seller Configuration" in the PayPal Invoicer menu.'],
                               ['If you change any of your information (like shipping price), make sure to click "Update Seller Configuration" again.'],
                               [''],
-                              ['4) If you add new items for sale on your form, click "Rebuild Inventory". This will not remove any deleted items or update the price of existing items; only add new ones.'],
-                              ['Don\'t modify anything on the "Inventory" or "Form Responses" tab by hand. Either your changes will be lost or you\'ll break the invoicer :)'],
+                              ['4) If you add new items for sale on your form, click "Add New Inventory Items". This will not remove any deleted items or update the price of existing items; only add new ones.'],
+                              ['Don\'t modify anything on the "Inventory" tab by hand. Either your changes will be lost or you\'ll break the invoicer :)'],
                               [''],
                               ['Need help? Message me on Telegram (@shirgoldbird) or email me@shirgoldbird.com']];
     getStartedSheet.getRange(1, 1, getStartedHelpText.length, 1).setValues(getStartedHelpText);

@@ -277,7 +277,13 @@ function parseOrder(rowId) {
     var itemObj = parseItemInfo(item, false);
     if (currCell !== "None" && currCell !== "" && !isEmpty(itemObj)) {
       var order = {};
-      var quantity = currCell.split(" ")[0];
+      var quantity = 0;
+      if (Number.isInteger(currCell)) {
+        quantity = currCell;
+      } else {
+        var quantityStr = currCell.split(" ")[0];
+        quantity = parseInt(quantityStr);
+      }
       order['name'] = itemObj[item]['itemName'];
       order['quantity'] = quantity;
       order['unit_amount'] = {
@@ -289,7 +295,7 @@ function parseOrder(rowId) {
       var inventory = inventorySheet.getDataRange().getValues();
       var valueRow = findTextInColumn(inventorySheet, 1, order['name'], false).getRow();
       var qtySold = parseInt(inventory[valueRow - 1][2]);
-      var updatedQtySold = qtySold + parseInt(quantity);
+      var updatedQtySold = qtySold + quantity;
 
       inventorySheet.getRange(valueRow, 3).setValue(updatedQtySold);
     }

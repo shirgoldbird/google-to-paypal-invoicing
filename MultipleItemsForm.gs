@@ -49,6 +49,7 @@ function onOpen() {
       .addSeparator()
       .addItem('Update Seller Config', 'parseSellerInfo')
       .addItem('Add New Inventory Items', 'parseAllItems')
+      .addItem('Recount Inventory', 'recountInventory')
       .addToUi();
 }
 
@@ -109,6 +110,10 @@ function setup() {
                               ['4) If you add new items for sale on your form, click "Add New Inventory Items". This will not remove any deleted items or update the price of existing items; only add new ones.'],
                               ['Don\'t modify anything on the "Inventory" tab by hand. Either your changes will be lost or you\'ll break the invoicer :)'],
                               [''],
+                              ['5) If someone wants to change their order later, update the spreadsheet row with their form submission to reflect their new order. Then click "Recount Inventory" for the new number of items sold to repopulate.'],
+                              ['Again, don\'t modify the "Inventory" tab by hand. Update the "Form Responses 1" tab instead, then run this function. This will also rebuild the inventory and add any new items.'],
+                              ['You can also resend the invoice for that row if needed.'],
+                              [''],
                               ['Need help? Message me on Telegram (@shirgoldbird) or email me@shirgoldbird.com']];
     getStartedSheet.getRange(1, 1, getStartedHelpText.length, 1).setValues(getStartedHelpText);
     getStartedSheet.autoResizeColumns(1, 1);
@@ -165,6 +170,27 @@ function parseItemInfo(item) {
   }
 
   return itemInfo;
+}
+
+/**
+  * Delete the current inventory, rebuild the item list, then recount the number of items sold.
+  * Useful if a customer wants to change their order later.
+  */
+function recountInventory() {
+  // delete inventory data, except the headers
+  inventorySheet.getRange('A2:C').clearContent();
+
+  // rebuild the inventory
+  parseAllItems();
+
+  // recount items
+  var ordersRange = orderSheet.getDataRange();
+  var orders = ordersRange.getValues();
+  // Start at row 2, skipping headers in row 1
+  // parseOrder will subtract 1 from this value
+  for (var rowsWithoutHeader = 2; rowsWithoutHeader < orders.length + 1; rowsWithoutHeader++) {
+    parseOrder(rowsWithoutHeader);
+  }
 }
 
 // figure out what items we have for sale and how much they're selling for
